@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:test_taksu/databases/todo_db.dart';
+import 'package:test_taksu/models/todo.dart';
 import 'package:test_taksu/models/user.dart';
 import 'package:test_taksu/screens/forms/add_todo.dart';
 import 'package:test_taksu/services/colors.dart';
@@ -33,6 +35,19 @@ class _HomeScreenState extends State<HomeScreen> {
       'status' : 'overdue'
     }
   ];
+
+  late TodoDB _todoDB;
+  Todo todo = Todo();
+  List<Todo> todos = [];
+
+  getTodoData() async{
+    List<Todo> listTodos = await _todoDB.fetchUser(userId: widget.initData!.id!);
+    if(mounted){
+      setState(() {
+        todos = listTodos;
+      });
+    }
+  }
   
   Color statusColor(String status){
     if(status == 'done'){
@@ -45,16 +60,29 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void initState() {
+    setState(() {
+      _todoDB = TodoDB.instance;
+    });
+    getTodoData();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: TaksuColor.primaryBG(),
       appBar: Wh.appBar(context,
         title: 'Hi, ' + widget.initData!.name!
       ),
-      body: ListView(
+      body: todos.isEmpty ? const Center(
+        child: TextCustom(
+          text: 'No Data',
+        ),
+      ) : ListView(
         padding: const EdgeInsets.only(top: 30),
-        children: List.generate(todoData.length, (index) {
-          var data = todoData[index];
+        children: List.generate(todos.length, (index) {
+          var data = todos[index];
           return WidSplash(
             margin: const EdgeInsets.only(left: 30, right: 30, bottom: 30),
             padding: const EdgeInsets.all(28),
@@ -67,14 +95,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     WidSplash(
-                      color: statusColor(data['status']),
+                      color: statusColor(data.status!),
                       radius: BorderRadius.circular(30),
                       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                       child: TextCustom(
                         size: 10,
                         weight: FontWeight.bold,
-                        text: data['status'].toString().toUpperCase(),
-                        color: data['status'] == 'open' ? TaksuColor.primaryBlack() : TaksuColor.white(),
+                        text: data.status.toString().toUpperCase(),
+                        color: data.status == 'open' ? TaksuColor.primaryBlack() : TaksuColor.white(),
                       ),
                     ),
                     WidSplash(
@@ -88,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 TextCustom(
-                  text: data['title'],
+                  text: data.title,
                   size: 20,
                   weight: FontWeight.bold,
                 ),
@@ -104,13 +132,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             size: 16,
                           ),
                           TextCustom(
-                            text: data['due_date'],
+                            text: data.dueDate,
                             size: 16,
                           ),
                         ],
                       ),
                     ),
-                    data['status'] == 'done' ? const SizedBox.shrink() : WidSplash(
+                    data.status == 'done' ? const SizedBox.shrink() : WidSplash(
                       color: TaksuColor.primaryPurple(),
                       radius: BorderRadius.circular(6),
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 11),
@@ -133,7 +161,10 @@ class _HomeScreenState extends State<HomeScreen> {
           Wh.dialog(
               context,
               child: const AddTodo(),
-              transparent: false
+              transparent: false,
+              then: (res){
+                getTodoData();
+              }
           );
         },
         child: Icon(

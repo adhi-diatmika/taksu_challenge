@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:test_taksu/models/user.dart';
 import 'package:test_taksu/services/colors.dart';
 import 'package:test_taksu/services/widget.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class AddTodo extends StatefulWidget {
-  const AddTodo({Key? key}) : super(key: key);
+  final User? initData;
+  const AddTodo({
+    Key? key,
+    this.initData
+  }) : super(key: key);
 
   @override
   _AddTodoState createState() => _AddTodoState();

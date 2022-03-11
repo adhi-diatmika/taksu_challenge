@@ -20,7 +20,7 @@ class UserDB{
         CREATE TABLE ${User.tblUser}(
           ${User.colId} INTEGER PRIMARY KEY,
           ${User.colName} TEXT NOT NULL UNIQUE,
-          ${User.colCreatedAt} INT NOT NULL
+          ${User.colCreatedAt} TEXT NOT NULL
         )
         '''
     );

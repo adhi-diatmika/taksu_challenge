@@ -9,7 +9,11 @@ class User{
   String? name;
   String? createdAt;
 
-  User({this.id, this.name, this.createdAt});
+  User({
+    this.id,
+    this.name,
+    this.createdAt
+  });
 
   Map<String, dynamic> toMap(){
     var map = <String, dynamic>{
