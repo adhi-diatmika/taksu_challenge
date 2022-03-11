@@ -31,6 +31,20 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
   }
+  
+  //update to do
+  updateTodo(Todo newTodo) async{
+    todo.id = newTodo.id;
+    todo.userId = newTodo.userId;
+    todo.title = newTodo.title;
+    todo.status = 'done';
+    todo.createdAt = newTodo.createdAt;
+    todo.dueDate = newTodo.dueDate;
+    
+    await _todoDB.updateTodo(todo).then((value) {
+      getTodoData();
+    });
+  }
 
   //delete to do
   deleteTodo(int id)async{
@@ -48,6 +62,14 @@ class _HomeScreenState extends State<HomeScreen> {
     } else{
       return TaksuColor.primaryGrey();
     }
+  }
+
+  //check expired status
+  String statusCheck ({required String date, required String status}){
+    if(DateTime.now().compareTo(DateTime.parse(date))>0 && status == 'open'){
+      return 'overdue';
+    }
+    return status;
   }
 
   @override
@@ -74,6 +96,8 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.only(top: 30),
         children: List.generate(todos.length, (index) {
           var data = todos[index];
+          String newStatus = statusCheck(date: data.dueDate!, status: data.status!);
+
           return WidSplash(
             margin: const EdgeInsets.only(left: 30, right: 30, bottom: 30),
             padding: const EdgeInsets.all(28),
@@ -86,14 +110,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     WidSplash(
-                      color: statusColor(data.status!),
+                      color: statusColor(newStatus),
                       radius: BorderRadius.circular(30),
                       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                       child: TextCustom(
                         size: 10,
                         weight: FontWeight.bold,
-                        text: data.status.toString().toUpperCase(),
-                        color: data.status == 'open' ? TaksuColor.primaryBlack() : TaksuColor.white(),
+                        text: newStatus.toUpperCase(),
+                        color: newStatus == 'open' ? TaksuColor.primaryBlack() : TaksuColor.white(),
                       ),
                     ),
                     WidSplash(
@@ -136,6 +160,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: TaksuColor.primaryPurple(),
                       radius: BorderRadius.circular(6),
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 11),
+                      onTap: (){
+                        updateTodo(data);
+                      },
                       child: const TextCustom(
                         text: 'DONE',
                         size: 14,

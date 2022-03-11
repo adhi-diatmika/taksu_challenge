@@ -48,6 +48,13 @@ class TodoDB{
     return await db!.insert(Todo.tblTodo, todo.toMap());
   }
 
+  Future<int> updateTodo(Todo todo) async{
+    Database? db = await database;
+    return await db!.update(Todo.tblTodo, todo.toMap(),
+        where: '${Todo.colId}=?', whereArgs: [todo.id]
+    );
+  }
+
   Future<List<Todo>> fetchTodo({int? userId}) async{
     Database? db = await database;
     List<Map> todos = await db!.rawQuery('SELECT * FROM ${Todo.tblTodo} WHERE ${Todo.colUserId}=?', [userId]);
