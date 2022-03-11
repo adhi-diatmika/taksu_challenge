@@ -40,3 +40,18 @@ String dateConvert({@required var date, String? dateFormat = 'dd MMMM yyyy hh:mm
   String formatted = format.format(dateTime).toString();
   return formatted;
 }
+
+// ucwords('lorem ipsum') -> Lorem Ipsum
+ucWords(String? str){
+  if(str == '' || str == null) {
+    return '';
+  }
+
+  var split = str.split(' ');
+  for (var i = 0; i < split.length; i++) {
+    if(split[i] != ''){
+      split[i] = split[i][0].toUpperCase() + split[i].substring(1);
+    }
+  }
+  return split.join(' ');
+}

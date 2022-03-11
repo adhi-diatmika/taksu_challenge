@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: TaksuColor.primaryBG(),
       appBar: Wh.appBar(context,
-        title: 'Hi, ' + widget.initData!.name!
+        title: 'Hi, ' + ucWords(widget.initData!.name!)
       ),
       body: todos.isEmpty ? const Center(
         child: TextCustom(

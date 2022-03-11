@@ -23,13 +23,14 @@ class _AddTodoState extends State<AddTodo> {
       dueDateController = TextEditingController(text: '');
   bool titleValidate = false,
       dueDateValidate = false;
+  String dueDate = '';
 
   late TodoDB _todoDB;
   Todo todo = Todo();
 
   addTodo()async{
     todo.title = titleController.text;
-    todo.dueDate = dueDateController.text;
+    todo.dueDate = dueDate;
     todo.userId = widget.initData!.id;
     todo.status = 'open';
     todo.createdAt = DateTime.now().toString();
@@ -48,10 +49,6 @@ class _AddTodoState extends State<AddTodo> {
       if(titleController.text.isNotEmpty){
         setState(() {
           titleValidate = false;
-        });
-      }else{
-        setState(() {
-          titleValidate = true;
         });
       }
     });
@@ -112,6 +109,7 @@ class _AddTodoState extends State<AddTodo> {
                   ),
                   onConfirm: (date){
                     setState(() {
+                      dueDate = date.toString();
                       dueDateController.text = dateConvert(date: date.toString());
                     });
                   }
