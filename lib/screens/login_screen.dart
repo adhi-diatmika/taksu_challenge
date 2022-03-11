@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:test_taksu/databases/user_db.dart';
+import 'package:test_taksu/models/user.dart';
 import 'package:test_taksu/screens/home_screen.dart';
 import 'package:test_taksu/services/colors.dart';
 import 'package:test_taksu/services/helper.dart';
@@ -14,8 +16,22 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController nameController = TextEditingController(text: '');
 
+  late UserDB _userDB;
+  User user = User();
+
+  login()async{
+    user.name = nameController.text.toLowerCase();
+    user.createdAt = DateTime.now().toString();
+    await _userDB.insertUser(user);
+
+    push(context, const HomeScreen());
+  }
+
   @override
   void initState() {
+    setState(() {
+      _userDB = UserDB.instance;
+    });
     super.initState();
   }
 
@@ -44,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   radius: BorderRadius.circular(5),
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   onTap: (){
-                    push(context, const HomeScreen());
+                    login();
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
