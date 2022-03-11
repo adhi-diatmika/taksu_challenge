@@ -43,14 +43,14 @@ class WidSplash extends StatelessWidget {
         // color: color,
       ),
       child: Material(
-        color: color ?? CNColor.transparent(),
+        color: color ?? TaksuColor.transparent(),
         key: key,
         elevation: elevation,
         borderRadius: radius,
         child: InkWell(
             onLongPress: onLongPress,
-            splashColor: splash ?? CNColor.blackCN(o: 0.03),
-            highlightColor: highlightColor ?? CNColor.blackCN(o: 0.03),
+            splashColor: splash ?? TaksuColor.primaryBG(o: 0.03),
+            highlightColor: highlightColor ?? TaksuColor.primaryBG(o: 0.03),
             onTap: onTap,
             borderRadius: radius,
             child: Container(
@@ -103,7 +103,7 @@ class TextCustom extends StatelessWidget {
         textAlign: align,
         maxLines: maxLines,
         style: TextStyle(
-            color: color ?? CNColor.blackPrimary(),
+            color: color ?? TaksuColor.white(),
             fontFamily: font ?? CNFont.poppins,
             height: height,
             fontSize: size.toDouble(),
@@ -148,7 +148,7 @@ class Wh {
             }
           },
           icon: const Icon(Icons.arrow_back_ios_rounded, size: 18,),
-          color: textColor ?? CNColor.white(),
+          color: textColor ?? TaksuColor.white(),
         );
       }else{
         return null;
@@ -160,7 +160,7 @@ class Wh {
         iconTheme: const IconThemeData(size: 3),
         actionsIconTheme: const IconThemeData(size: 3),
         centerTitle: center,
-        backgroundColor: color ?? CNColor.primaryColor(),
+        backgroundColor: color ?? TaksuColor.primaryBG(),
         automaticallyImplyLeading: autoLeading,
         titleSpacing: back ? 0 : 15,
         elevation: elevation.toDouble(),
@@ -169,7 +169,7 @@ class Wh {
             ? title
             : TextCustom(
           text: title.toString(),
-          color: textColor ?? CNColor.white(),
+          color: textColor ?? TaksuColor.white(),
           size: 18,
           weight: weight ?? FontWeight.bold,
           font: CNFont.poppins,
