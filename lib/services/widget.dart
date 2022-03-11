@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test_taksu/services/colors.dart';
 import 'package:test_taksu/services/fonts.dart';
 
@@ -108,7 +109,7 @@ class TextCustom extends StatelessWidget {
         maxLines: maxLines,
         style: TextStyle(
             color: color ?? TaksuColor.white(),
-            fontFamily: font ?? CNFont.roboto,
+            fontFamily: font ?? TaksuFont.roboto,
             height: height,
             fontSize: size.toDouble(),
             fontWeight: weight ?? FontWeight.normal,
@@ -213,7 +214,7 @@ class _TextInputState extends State<TextInputCustom> {
                 obscureText: widget.obscure,
                 onSubmitted: widget.submit,
                 style: TextStyle(
-                    fontFamily: CNFont.roboto,
+                    fontFamily: TaksuFont.roboto,
                     height: 1,
                     fontSize: widget.fontSize,
                     color: TaksuColor.white()
@@ -238,11 +239,11 @@ class _TextInputState extends State<TextInputCustom> {
                   ),
                   errorText: widget.errorText,
                   errorStyle: TextStyle(
-                    fontFamily: CNFont.roboto,
+                    fontFamily: TaksuFont.roboto,
                     fontSize: 9,
                   ),
                   hintStyle: widget.hintStyle ?? TextStyle(
-                      fontFamily: CNFont.roboto,
+                      fontFamily: TaksuFont.roboto,
                       color: const Color.fromRGBO(109, 109, 109, 0.7),
                       fontSize: 12),
                   enabledBorder: widget.border ?? OutlineInputBorder(
@@ -262,6 +263,112 @@ class _TextInputState extends State<TextInputCustom> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class Wh{
+  static appBar(context, {
+    Object title = '',
+    bool reload = false,
+    Color? color,
+    Color? textColor,
+    double elevation = 0.0,
+    bool back = false,
+    double spacing = 15.0,
+    List<Widget>? actions,
+    bool autoLeading = false,
+    bool center = false,
+    Widget? leading,
+    PreferredSizeWidget? bottom,
+    Widget? flexibleSpace,
+    double? height,
+    FontWeight? weight,
+  }) {
+    Widget? _leading(){
+      if(leading != null){
+        return leading;
+      }else if (back){
+        return IconButton(
+          onPressed: () {
+            if (reload) {
+              Navigator.of(context).pop({'edited': true});
+            } else {
+              Navigator.pop(context);
+            }
+          },
+          icon: const Icon(Icons.arrow_back_ios_rounded, size: 18,),
+          color: textColor ?? TaksuColor.white(),
+        );
+      }else{
+        return null;
+      }
+    }
+
+    Widget _appBar() {
+      return AppBar(
+        iconTheme: const IconThemeData(size: 3),
+        actionsIconTheme: const IconThemeData(size: 3),
+        centerTitle: center,
+        backgroundColor: color ?? TaksuColor.primaryBG(),
+        automaticallyImplyLeading: autoLeading,
+        titleSpacing: back ? 0 : 30,
+        elevation: elevation.toDouble(),
+        leading: _leading(),
+        title: title is Widget
+            ? title
+            : TextCustom(
+          text: title.toString(),
+          color: textColor ?? TaksuColor.white(),
+          size: 30,
+          weight: weight ?? FontWeight.bold,
+          font: TaksuFont.roboto,
+        ),
+        actions: actions,
+        bottom: bottom,
+        flexibleSpace: flexibleSpace,
+      );
+    }
+
+    return height == null
+        ? _appBar()
+        : PreferredSize(
+        preferredSize: Size.fromHeight(height),
+        child: _appBar()
+    );
+  }
+}
+
+class SVGPicture extends StatelessWidget {
+  final String image;
+  final double? width, height;
+  final BoxFit fit;
+  final bool networkImage;
+  final Color? color;
+
+  const SVGPicture(this.image, {
+    Key? key,
+    this.width,
+    this.height,
+    this.fit = BoxFit.contain,
+    this.networkImage = false,
+    this.color
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return networkImage ? SvgPicture.network(
+      image,
+      width: width,
+      height: height,
+      fit: fit,
+      color: color,
+    ) : SvgPicture.asset(
+      image,
+      width: width,
+      height: height,
+      fit: fit,
+      color: color,
     );
   }
 }

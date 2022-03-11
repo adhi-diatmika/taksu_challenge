@@ -9,6 +9,10 @@ class TaksuColor{
     return Color.fromRGBO(64, 68, 75, o);
   }
 
+  static primaryBlack({double o = 1}){
+    return Color.fromRGBO(65, 65, 65, o);
+  }
+
   static white({double o = 1}){
     return Color.fromRGBO(255, 255, 255, o);
   }

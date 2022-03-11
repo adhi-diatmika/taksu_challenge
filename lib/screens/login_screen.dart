@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:test_taksu/screens/home_screen.dart';
 import 'package:test_taksu/services/colors.dart';
+import 'package:test_taksu/services/helper.dart';
 import 'package:test_taksu/services/widget.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -41,6 +43,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: TaksuColor.primaryGreen(),
                   radius: BorderRadius.circular(5),
                   padding: const EdgeInsets.symmetric(vertical: 8),
+                  onTap: (){
+                    push(context, const HomeScreen());
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
