@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_taksu/screens/dashboard.dart';
+import 'package:test_taksu/screens/login_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
             TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
           })
       ),
-      home: const Dashboard(),
+      home: const LoginScreen(),
     );
   }
 }

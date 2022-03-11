@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:test_taksu/services/colors.dart';
 import 'package:test_taksu/services/fonts.dart';
 
+
+//Custom container widget
 class WidSplash extends StatelessWidget {
   final Key? keys;
   final Widget? child;
@@ -60,6 +63,7 @@ class WidSplash extends StatelessWidget {
   }
 }
 
+//Custom text widget
 class TextCustom extends StatelessWidget {
   final String? text, font;
   final Color? color;
@@ -77,7 +81,7 @@ class TextCustom extends StatelessWidget {
     Key? key,
     @required this.text,
     this.color,
-    this.size = 16,
+    this.size = 15,
     this.decoration,
     this.align = TextAlign.start,
     this.maxLines,
@@ -104,7 +108,7 @@ class TextCustom extends StatelessWidget {
         maxLines: maxLines,
         style: TextStyle(
             color: color ?? TaksuColor.white(),
-            fontFamily: font ?? CNFont.poppins,
+            fontFamily: font ?? CNFont.roboto,
             height: height,
             fontSize: size.toDouble(),
             fontWeight: weight ?? FontWeight.normal,
@@ -117,74 +121,147 @@ class TextCustom extends StatelessWidget {
   }
 }
 
-class Wh {
-  static appBar(context, {
-    Object title = '',
-    bool reload = false,
-    Color? color,
-    Color? textColor,
-    double elevation = 0.0,
-    bool back = true,
-    double spacing = 15.0,
-    List<Widget>? actions,
-    bool autoLeading = false,
-    bool center = true,
-    Widget? leading,
-    PreferredSizeWidget? bottom,
-    Widget? flexibleSpace,
-    double? height,
-    FontWeight? weight,
-  }) {
-    Widget? _leading(){
-      if(leading != null){
-        return leading;
-      }else if (back){
-        return IconButton(
-          onPressed: () {
-            if (reload) {
-              Navigator.of(context).pop({'edited': true});
-            } else {
-              Navigator.pop(context);
-            }
-          },
-          icon: const Icon(Icons.arrow_back_ios_rounded, size: 18,),
-          color: textColor ?? TaksuColor.white(),
-        );
-      }else{
-        return null;
-      }
-    }
+class TextInputCustom extends StatefulWidget {
+  final Key? keys;
+  final String? label, hint, errorText;
+  final TextEditingController? controller;
+  final TextInputType? type;
+  final TextInputAction? action;
+  final bool enabled, obscure, showCursor, readOnly;
+  final Function()? onTap;
+  final Function(String)? submit, change;
+  final FocusNode? node;
+  final int? length, maxLines;
+  final Widget? suffix, prefix, prefixIcon;
+  final double space, fontSize;
+  final InputBorder? border;
+  final TextStyle? hintStyle;
+  final Color? backgroundColor, disableColor;
+  final EdgeInsetsGeometry? contentPadding;
+  final List<TextInputFormatter>? formatter;
 
-    Widget _appBar() {
-      return AppBar(
-        iconTheme: const IconThemeData(size: 3),
-        actionsIconTheme: const IconThemeData(size: 3),
-        centerTitle: center,
-        backgroundColor: color ?? TaksuColor.primaryBG(),
-        automaticallyImplyLeading: autoLeading,
-        titleSpacing: back ? 0 : 15,
-        elevation: elevation.toDouble(),
-        leading: _leading(),
-        title: title is Widget
-            ? title
-            : TextCustom(
-          text: title.toString(),
-          color: textColor ?? TaksuColor.white(),
-          size: 18,
-          weight: weight ?? FontWeight.bold,
-          font: CNFont.poppins,
-        ),
-        actions: actions,
-        bottom: bottom,
-        flexibleSpace: flexibleSpace,
-      );
-    }
+  const TextInputCustom({
+    this.keys,
+    this.label,
+    this.hint,
+    this.controller,
+    this.type,
+    this.space = 10,
+    this.fontSize = 16,
+    this.readOnly = false,
+    this.action,
+    this.enabled = true,
+    this.showCursor = true,
+    this.obscure = false,
+    this.submit,
+    this.prefix,
+    this.suffix,
+    this.onTap,
+    this.change,
+    this.node,
+    this.length,
+    this.maxLines,
+    this.border,
+    this.hintStyle,
+    this.backgroundColor,
+    this.contentPadding,
+    this.prefixIcon,
+    this.disableColor,
+    this.formatter,
+    this.errorText
+  }) : super(key: keys);
 
-    return height == null
-        ? _appBar()
-        : PreferredSize(
-        preferredSize: Size.fromHeight(height),
-        child: _appBar()
+  @override
+  _TextInputState createState() => _TextInputState();
+}
+
+class _TextInputState extends State<TextInputCustom> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: widget.space),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          widget.label == null
+              ? const SizedBox.shrink()
+              : Container(
+            child: TextCustom(
+              text: widget.label,
+              size: 15,
+              weight: FontWeight.bold,
+            ),
+            margin: const EdgeInsets.only(bottom: 10),
+          ),
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: widget.enabled
+                    ? widget.backgroundColor ?? TaksuColor.primaryCard()
+                    : widget.disableColor ?? const Color.fromRGBO(232, 236, 241, 1),
+            ),
+            // height: 40,
+            child: TextField(
+                readOnly: widget.readOnly,
+                onTap: widget.onTap,
+                showCursor: widget.showCursor,
+                controller: widget.controller,
+                keyboardType: widget.type,
+                textInputAction: widget.action,
+                enabled: widget.enabled,
+                focusNode: widget.node,
+                obscureText: widget.obscure,
+                onSubmitted: widget.submit,
+                style: TextStyle(
+                    fontFamily: CNFont.roboto,
+                    height: 1,
+                    fontSize: widget.fontSize,
+                    color: TaksuColor.white()
+                ),
+                maxLines: widget.maxLines ?? 1,
+                minLines: 1,
+                onChanged: widget.change,
+                inputFormatters: widget.formatter ?? [LengthLimitingTextInputFormatter(widget.length)],
+                decoration: InputDecoration(
+                  prefix: widget.prefix,
+                  prefixIcon: widget.prefixIcon,
+                  isDense: true,
+                  suffixIcon: widget.suffix,
+                  suffixIconConstraints: const BoxConstraints(maxHeight: 50),
+                  prefixIconConstraints: const BoxConstraints(maxHeight: 50),
+                  suffixStyle: const TextStyle(),
+                  contentPadding: widget.contentPadding ?? const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                  hintText: widget.hint,
+                  border: widget.border ?? OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5),
+                      borderSide: BorderSide(color: TaksuColor.transparent())
+                  ),
+                  errorText: widget.errorText,
+                  errorStyle: TextStyle(
+                    fontFamily: CNFont.roboto,
+                    fontSize: 9,
+                  ),
+                  hintStyle: widget.hintStyle ?? TextStyle(
+                      fontFamily: CNFont.roboto,
+                      color: const Color.fromRGBO(109, 109, 109, 0.7),
+                      fontSize: 12),
+                  enabledBorder: widget.border ?? OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5),
+                      borderSide: BorderSide(color: TaksuColor.transparent())
+                  ),
+                  focusedBorder: widget.border ?? OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(6),
+                      borderSide: BorderSide(color: TaksuColor.transparent())
+                  ),
+                  disabledBorder: widget.border ?? OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5),
+                      borderSide: BorderSide(color: TaksuColor.transparent())
+                  ),
+                )
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
