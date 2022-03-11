@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test_taksu/services/colors.dart';
 import 'package:test_taksu/services/fonts.dart';
+import 'package:test_taksu/services/helper.dart';
 
 
 //Custom container widget
@@ -337,6 +338,53 @@ class Wh{
         child: _appBar()
     );
   }
+
+  // dialog(context, child: Widget) -> slide 0.25 (up), slide -0.25 (down)
+  static dialog(context, {
+    bool dismiss = true,
+    double slide = 0,
+    bool transparent = false,
+    bool forceClose = true,
+    MainAxisAlignment? position,
+    @required Widget? child,
+    Function? then,
+    BorderRadius? radius
+  }) {
+    Future<bool> onWillPop() {
+      return Future.value(forceClose);
+    }
+
+    return showDialog(
+        context: context,
+        barrierDismissible: dismiss,
+        builder: (BuildContext context) {
+          return WillPopScope(
+            onWillPop: onWillPop,
+            child: ZoomIn(
+              child: Column(
+                  mainAxisAlignment: position ?? MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: MQuery.width(context),
+                      margin: const EdgeInsets.all(15),
+                      child: ClipRRect(
+                        borderRadius: radius ?? BorderRadius.circular(0),
+                        child: Material(
+                          color: transparent
+                              ? TaksuColor.transparent()
+                              : TaksuColor.primaryBG(),
+                          child: child,
+                        ),
+                      ),
+                    )
+                  ]),
+            ),
+          );
+        }).then((res) {
+      if (then != null) then(res);
+    });
+  }
 }
 
 class SVGPicture extends StatelessWidget {
@@ -369,6 +417,51 @@ class SVGPicture extends StatelessWidget {
       height: height,
       fit: fit,
       color: color,
+    );
+  }
+}
+
+//zoom in animated
+class ZoomIn extends StatefulWidget {
+  final Widget? child;
+  final Key? keys;
+
+  const ZoomIn({
+    this.keys,
+    this.child
+  }) : super(key: keys);
+
+  @override
+  _ZoomInState createState() => _ZoomInState();
+}
+
+class _ZoomInState extends State<ZoomIn> with SingleTickerProviderStateMixin {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  late AnimationController controller;
+  late Animation<double> scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 250));
+    scaleAnimation = CurvedAnimation(parent: controller, curve: Curves.decelerate);
+    controller.forward();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(
+        key: _scaffoldKey,
+        scale: scaleAnimation,
+        child: widget.child
     );
   }
 }

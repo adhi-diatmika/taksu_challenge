@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_taksu/screens/forms/add_todo.dart';
 import 'package:test_taksu/services/colors.dart';
 import 'package:test_taksu/services/widget.dart';
 
@@ -103,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    WidSplash(
+                    data['status'] == 'done' ? const SizedBox.shrink() : WidSplash(
                       color: TaksuColor.primaryPurple(),
                       radius: BorderRadius.circular(6),
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 11),
@@ -123,7 +124,11 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: TaksuColor.primaryGreen(),
         onPressed: (){
-
+          Wh.dialog(
+              context,
+              child: const AddTodo(),
+              transparent: false
+          );
         },
         child: Icon(
           Icons.add_rounded,
