@@ -15,6 +15,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController nameController = TextEditingController(text: '');
+  bool nameValidate = false;
 
   late UserDB _userDB;
   User user = User();
@@ -40,6 +41,13 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _userDB = UserDB.instance;
     });
+    nameController.addListener(() {
+      if(nameController.text.isNotEmpty){
+        setState(() {
+          nameValidate = false;
+        });
+      }
+    });
     super.initState();
   }
 
@@ -60,7 +68,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   controller: nameController,
                   hint: 'Name',
                   action: TextInputAction.done,
+                  errorText: nameValidate ? 'Name cannot empty' : null,
                 ),
+
                 const SizedBox(height: 20,),
                 WidSplash(
                   width: 112,
@@ -68,7 +78,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   radius: BorderRadius.circular(5),
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   onTap: (){
-                    login();
+                    if(nameController.text.isEmpty){
+                      setState(() {
+                        nameValidate = true;
+                      });
+                    }else{
+                      login();
+                    }
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

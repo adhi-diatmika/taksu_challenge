@@ -239,11 +239,11 @@ class _TextInputState extends State<TextInputCustom> {
                       borderRadius: BorderRadius.circular(5),
                       borderSide: BorderSide(color: TaksuColor.transparent())
                   ),
-                  errorText: widget.errorText,
-                  errorStyle: TextStyle(
-                    fontFamily: TaksuFont.roboto,
-                    fontSize: 9,
-                  ),
+                  // errorText: widget.errorText,
+                  // errorStyle: TextStyle(
+                  //   fontFamily: TaksuFont.roboto,
+                  //   fontSize: 9,
+                  // ),
                   hintStyle: widget.hintStyle ?? TextStyle(
                       fontFamily: TaksuFont.roboto,
                       color: const Color.fromRGBO(109, 109, 109, 0.7),
@@ -263,6 +263,14 @@ class _TextInputState extends State<TextInputCustom> {
                 )
             ),
           ),
+          widget.errorText == null ? const SizedBox.shrink() : Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextCustom(
+              text: widget.errorText,
+              size: 9,
+              color: Colors.red,
+            ),
+          )
         ],
       ),
     );

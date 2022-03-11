@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
 //push navigator
 push(context,route){
@@ -28,4 +30,13 @@ class MQuery{
   static statusBar(context){
     return MediaQuery.of(context).padding.top;
   }
+}
+
+//convert date format
+String dateConvert({@required var date, String? dateFormat = 'dd MMMM yyyy hh:mma', String locale = 'en'}){
+  initializeDateFormatting(locale); //inisialisasi date dalam  bahasa indonesia
+  DateTime dateTime = DateTime.parse(date.toString());
+  DateFormat format = DateFormat(dateFormat, locale); // 'id' kode untuk bahasa indonesia
+  String formatted = format.format(dateTime).toString();
+  return formatted;
 }

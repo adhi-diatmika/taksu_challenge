@@ -4,6 +4,7 @@ import 'package:test_taksu/models/todo.dart';
 import 'package:test_taksu/models/user.dart';
 import 'package:test_taksu/screens/forms/add_todo.dart';
 import 'package:test_taksu/services/colors.dart';
+import 'package:test_taksu/services/helper.dart';
 import 'package:test_taksu/services/widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -150,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             size: 16,
                           ),
                           TextCustom(
-                            text: data.dueDate,
+                            text: dateConvert(date: data.dueDate),
                             size: 16,
                           ),
                         ],
