@@ -18,30 +18,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List todoData = [
-    {
-      'title' : 'Submit Code to Taksu',
-      'due_date' : '21 October 2021 08:30PM',
-      'status' : 'open'
-    },
-    {
-      'title' : 'Interview with Taksu',
-      'due_date' : '21 October 2021 08:30PM',
-      'status' : 'done'
-    },
-    {
-      'title' : 'Interview with Taksu',
-      'due_date' : '21 October 2021 08:30PM',
-      'status' : 'overdue'
-    }
-  ];
-
   late TodoDB _todoDB;
   Todo todo = Todo();
   List<Todo> todos = [];
 
   getTodoData() async{
-    List<Todo> listTodos = await _todoDB.fetchUser(userId: widget.initData!.id!);
+    List<Todo> listTodos = await _todoDB.fetchTodo(userId: widget.initData!.id!);
     if(mounted){
       setState(() {
         todos = listTodos;
@@ -160,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: (){
           Wh.dialog(
               context,
-              child: const AddTodo(),
+              child: AddTodo(initData: widget.initData,),
               transparent: false,
               then: (res){
                 getTodoData();

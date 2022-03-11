@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:test_taksu/databases/todo_db.dart';
+import 'package:test_taksu/models/todo.dart';
 import 'package:test_taksu/models/user.dart';
 import 'package:test_taksu/services/colors.dart';
 import 'package:test_taksu/services/widget.dart';
@@ -18,6 +20,30 @@ class AddTodo extends StatefulWidget {
 class _AddTodoState extends State<AddTodo> {
   TextEditingController titleController = TextEditingController(text: ''),
       dueDateController = TextEditingController(text: '');
+
+  late TodoDB _todoDB;
+  Todo todo = Todo();
+
+  addTodo()async{
+    todo.title = titleController.text;
+    todo.dueDate = dueDateController.text;
+    todo.userId = widget.initData!.id;
+    todo.status = 'open';
+    todo.createdAt = DateTime.now().toString();
+
+    await _todoDB.insertTodo(todo).then((value) {
+      Navigator.pop(context);
+    });
+  }
+
+  @override
+  void initState() {
+    setState(() {
+      _todoDB = TodoDB.instance;
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ZoomIn(
@@ -74,6 +100,9 @@ class _AddTodoState extends State<AddTodo> {
                 radius: BorderRadius.circular(5),
                 width: 179,
                 padding: const EdgeInsets.symmetric(vertical: 10),
+                onTap: (){
+                  addTodo();
+                },
                 child: const TextCustom(
                   text: 'Save',
                   align: TextAlign.center,

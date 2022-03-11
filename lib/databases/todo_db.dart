@@ -43,14 +43,21 @@ class TodoDB{
     return _database;
   }
 
-  Future<int> insertMedia(Todo todo) async{
+  Future<int> insertTodo(Todo todo) async{
     Database? db = await database;
     return await db!.insert(Todo.tblTodo, todo.toMap());
   }
 
-  Future<List<Todo>> fetchUser({int? userId}) async{
+  Future<List<Todo>> fetchTodo({int? userId}) async{
     Database? db = await database;
     List<Map> todos = await db!.rawQuery('SELECT * FROM ${Todo.tblTodo} WHERE ${Todo.colUserId}=?', [userId]);
     return todos.isEmpty ? [] : todos.map((e) => Todo.fromMap(e)).toList();
+  }
+
+  Future<int> deleteCart(int id) async{
+    Database? db = await database;
+    return await db!.delete(Todo.tblTodo,
+        where: '${Todo.colId}=?', whereArgs: [id]
+    );
   }
 }

@@ -60,9 +60,4 @@ class UserDB{
     List<Map> users = await db!.rawQuery('SELECT * FROM ${User.tblUser} WHERE ${User.colName}=?', [name]);
     return users.isEmpty ? [] : users.map((e) => User.fromMap(e)).toList();
   }
-
-  Future<int> deleteUser() async{
-    Database? db = await database;
-    return await db!.delete(User.tblUser);
-  }
 }
