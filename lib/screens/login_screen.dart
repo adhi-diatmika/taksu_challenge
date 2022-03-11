@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   //get user
   getLoggedUser() async{
-    List<User> listUsers = await _userDB.fetchUser(name: nameController.text);
+    List<User> listUsers = await _userDB.fetchUser(name: nameController.text.toLowerCase());
     if(mounted){
       push(context, HomeScreen(initData: listUsers[0],));
     }
