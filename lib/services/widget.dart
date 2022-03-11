@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:test_taksu/services/colors.dart';
 import 'package:test_taksu/services/fonts.dart';
 import 'package:test_taksu/services/helper.dart';
@@ -336,6 +337,20 @@ class Wh{
         : PreferredSize(
         preferredSize: Size.fromHeight(height),
         child: _appBar()
+    );
+  }
+
+  // Wh.toast('lorem ipsum')
+  static toast(String msg, {
+    bool isLong = false
+  }) {
+    return Fluttertoast.showToast(
+      msg: msg,
+      toastLength: isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: TaksuColor.black(o: 0.7),
+      textColor: TaksuColor.white(),
+      fontSize: 14.0,
     );
   }
 

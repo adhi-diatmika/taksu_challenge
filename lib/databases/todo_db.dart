@@ -54,7 +54,7 @@ class TodoDB{
     return todos.isEmpty ? [] : todos.map((e) => Todo.fromMap(e)).toList();
   }
 
-  Future<int> deleteCart(int id) async{
+  Future<int> deleteTodo(int id) async{
     Database? db = await database;
     return await db!.delete(Todo.tblTodo,
         where: '${Todo.colId}=?', whereArgs: [id]

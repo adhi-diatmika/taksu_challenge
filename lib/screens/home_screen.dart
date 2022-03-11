@@ -22,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Todo todo = Todo();
   List<Todo> todos = [];
 
+  //get to do data
   getTodoData() async{
     List<Todo> listTodos = await _todoDB.fetchTodo(userId: widget.initData!.id!);
     if(mounted){
@@ -30,7 +31,15 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
   }
-  
+
+  //delete to do
+  deleteTodo(int id)async{
+    await _todoDB.deleteTodo(id).then((value) {
+      getTodoData();
+    });
+  }
+
+  //color based on status
   Color statusColor(String status){
     if(status == 'done'){
       return TaksuColor.primaryGreen();
@@ -91,6 +100,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       radius: BorderRadius.circular(5),
                       padding: const EdgeInsets.all(8),
                       color: TaksuColor.primaryBG(),
+                      onTap: (){
+                        deleteTodo(data.id!);
+                      },
                       child: const SVGPicture(
                           'assets/icons/trash.svg'
                       ),
