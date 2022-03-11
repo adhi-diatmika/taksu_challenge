@@ -49,11 +49,10 @@ class UserDB{
     );
 
     if(users.isEmpty){
-      return await db.insert(User.tblUser, user.toMap()).then((value) => print('object'));
+      return await db.insert(User.tblUser, user.toMap());
     }else{
-      return print('te');
+      return true;
     }
-    // return await db.insert(User.tblUser, user.toMap());
   }
 
   Future<List<User>> fetchUser({String? name}) async{

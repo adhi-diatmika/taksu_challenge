@@ -19,12 +19,20 @@ class _LoginScreenState extends State<LoginScreen> {
   late UserDB _userDB;
   User user = User();
 
+  //user login
   login()async{
     user.name = nameController.text.toLowerCase();
     user.createdAt = DateTime.now().toString();
     await _userDB.insertUser(user);
+    getLoggedUser();
+  }
 
-    push(context, const HomeScreen());
+  //get user
+  getLoggedUser() async{
+    List<User> listUsers = await _userDB.fetchUser(name: nameController.text);
+    if(mounted){
+      push(context, HomeScreen(initData: listUsers[0],));
+    }
   }
 
   @override

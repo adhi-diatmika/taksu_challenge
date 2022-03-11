@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:test_taksu/models/user.dart';
 import 'package:test_taksu/screens/forms/add_todo.dart';
 import 'package:test_taksu/services/colors.dart';
 import 'package:test_taksu/services/widget.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final User? initData;
+  const HomeScreen({
+    Key? key,
+    this.initData
+  }) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -44,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: TaksuColor.primaryBG(),
       appBar: Wh.appBar(context,
-        title: 'Hi, John Doe'
+        title: 'Hi, ' + widget.initData!.name!
       ),
       body: ListView(
         padding: const EdgeInsets.only(top: 30),
@@ -89,20 +94,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(height: 7,),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const TextCustom(
-                          text: 'Due date:',
-                          size: 16,
-                        ),
-                        TextCustom(
-                          text: data['due_date'],
-                          size: 16,
-                        ),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const TextCustom(
+                            text: 'Due date:',
+                            size: 16,
+                          ),
+                          TextCustom(
+                            text: data['due_date'],
+                            size: 16,
+                          ),
+                        ],
+                      ),
                     ),
                     data['status'] == 'done' ? const SizedBox.shrink() : WidSplash(
                       color: TaksuColor.primaryPurple(),

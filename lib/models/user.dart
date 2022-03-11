@@ -5,9 +5,9 @@ class User{
   static const colName = 'name';
   static const colCreatedAt = 'created_at';
 
-  late int? id;
-  late String? name;
-  late String? createdAt;
+  int? id;
+  String? name;
+  String? createdAt;
 
   User({this.id, this.name, this.createdAt});
 
